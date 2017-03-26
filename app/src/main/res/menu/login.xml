@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sendTweet"
+        android:icon="@mipmap/twitter_edit"
+        android:onClick="onSendAction"
+        app:showAsAction="ifRoom"
+        android:title="Compose">
+    </item>
+
+</menu>

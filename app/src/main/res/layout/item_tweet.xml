@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivProfilePic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llName"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/ivProfilePic"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        >
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvRelativeTime"
+            android:text="TextView"
+            android:gravity="right"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="TextView"
+        android:autoLink="all"
+        android:paddingTop="5dp"
+        android:layout_toRightOf="@+id/ivProfilePic"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:layout_below="@+id/llName"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivTweetImage"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignLeft="@+id/tvBody"
+        app:srcCompat="@drawable/ic_launcher"
+        />
+
+
+
+</RelativeLayout>
