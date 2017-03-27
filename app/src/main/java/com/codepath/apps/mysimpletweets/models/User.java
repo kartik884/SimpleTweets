@@ -64,14 +64,30 @@ package com.codepath.apps.mysimpletweets.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.codepath.apps.mysimpletweets.database.MyDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class User implements Parcelable {
+@Table(database = MyDatabase.class)
+//@Parcel(analyze = User.class)
+public class User extends BaseModel implements Parcelable {
 
+    @Column
     private String name;
+
+    @Column
+    @PrimaryKey
     private long uid;
+
+    @Column
     private String screenName;
+
+    @Column
     private String profileImageUrl;
 
 
@@ -89,6 +105,22 @@ public class User implements Parcelable {
 
     public String getProfileImageUrl() {
         return profileImageUrl;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     //deserializer

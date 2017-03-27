@@ -8,12 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.util.Util;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
+import static com.codepath.apps.mysimpletweets.R.id.tvName;
 
 /**
  * Created by knyamagoudar on 3/21/17.
@@ -22,11 +26,25 @@ import java.util.List;
 public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.ViewHolder> {
 
 
+    // Define listener member variable
+    private OnItemClickListener listener;
+    // Define the listener interface
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
+    // Store a member variable for the contacts
+    private List<Tweet> mTweets;
+    // Store the context for easy access
+    private Context mContext;
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder  {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView tvUserName;
@@ -37,24 +55,37 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             // Stores the itemView in a public final member variable that can be used
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            tvUserName = (TextView) itemView.findViewById(R.id.tvName);
+            tvUserName = (TextView) itemView.findViewById(tvName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvRelativeTime = (TextView) itemView.findViewById(R.id.tvRelativeTime);
             ivProfilePic = (ImageView) itemView.findViewById(R.id.ivProfilePic);
             ivTweetImage = (ImageView) itemView.findViewById(R.id.ivTweetImage);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Triggers click upwards to the adapter on click
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(itemView, position);
+                        }
+                    }
+                }
+            });
+
         }
+
+
     }
 
 
-    // Store a member variable for the contacts
-    private List<Tweet> mTweets;
-    // Store the context for easy access
-    private Context mContext;
+
 
 
     // Pass in the contact array into the constructor
@@ -98,12 +129,12 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
 
         ImageView ivProfilePic = holder.ivProfilePic;
         ivProfilePic.setImageResource(0);
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfilePic);
+        Glide.with(getContext()).load(tweet.getUser().getProfileImageUrl()).bitmapTransform(new RoundedCornersTransformation(mContext,4,4)).into(ivProfilePic);
 
         ImageView ivTweetImage = holder.ivTweetImage;
         ivTweetImage.setImageResource(0);
         if(!tweet.getImageUrl().isEmpty()){
-            Picasso.with(getContext()).load(tweet.getImageUrl()).into(ivTweetImage);
+            Glide.with(getContext()).load(tweet.getImageUrl()).bitmapTransform(new RoundedCornersTransformation(mContext,20, 20)).into(ivTweetImage);
         }
     }
 

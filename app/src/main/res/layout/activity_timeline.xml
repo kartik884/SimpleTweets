@@ -1,27 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.codepath.apps.mysimpletweets.TimelineActivity">
+    tools:context="com.codepath.apps.mysimpletweets.activities.TimelineActivity">
 
-    <include android:layout_height="wrap_content" android:id="@+id/tbTimeline"
-        android:layout_width="match_parent" layout="@layout/toolbar_main"/>
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        <include android:layout_height="wrap_content" android:id="@+id/tbTimeline"
+            android:layout_width="match_parent" layout="@layout/toolbar_main"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeContainer"
-        android:layout_below="@+id/tbTimeline"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lvTweets"/>
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/lvTweets"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</RelativeLayout>
+    </FrameLayout>
+
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_anchor="@id/swipeContainer"
+        app:layout_anchorGravity="bottom|right|end"
+        />
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,27 +1,36 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.TwitterApplication;
+import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +56,9 @@ public class ComposeFragment extends DialogFragment {
     ImageView ivProfilePic;
     EditText etTweetBody;
     Button btSendTweet;
+    ImageButton ibtCancel;
+    AlertDialog dialog;
+    SharedPreferences pref;
 
     private TweetFragmentListner mListener;
 
@@ -76,8 +88,6 @@ public class ComposeFragment extends DialogFragment {
         if (getArguments() != null) {
             user = getArguments().getParcelable("user");
         }
-
-
     }
 
     @Override
@@ -98,20 +108,64 @@ public class ComposeFragment extends DialogFragment {
 
         etTweetBody = (EditText) view.findViewById(R.id.etTweetBody);
         btSendTweet = (Button) view.findViewById(R.id.btTweet);
+        ibtCancel = (ImageButton) view.findViewById(R.id.ibtTweetComposeCancel);
+
+        ibtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+            }
+        });
 
         btSendTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendTweet(etTweetBody.getText().toString());
+            sendTweet(etTweetBody.getText().toString());
             }
         });
 
         tvName.setText(user.getName());
         tvScreenName.setText(user.getScreenName());
 
-        Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivProfilePic);
+        Glide.with(getContext()).load(user.getProfileImageUrl()).bitmapTransform(
+                new RoundedCornersTransformation(getContext(),4, 4)).into(ivProfilePic);
 
         client = TwitterApplication.getRestClient();
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Do you want to save the draft?");
+
+        builder.setPositiveButton("Save Draft", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                SharedPreferences.Editor edit = pref.edit();
+                String tweetBodyText = etTweetBody.getText().toString();
+                if(!tweetBodyText.isEmpty()){
+                    edit.putString("tweetBody",etTweetBody.getText().toString());
+                    edit.commit();
+                    Toast.makeText(getContext(),"Draft Saved",Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            }
+        });
+
+        builder.setNegativeButton("Delete Draft", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences.Editor edit = pref.edit();
+                edit.putString("tweetBody","");
+                edit.commit();
+                dismiss();
+            }
+        });
+
+        dialog = builder.create();
+        pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        etTweetBody.setText(pref.getString("tweetBody",""));
     }
 
     // TODO: Rename method, update argument and hook method into UI event

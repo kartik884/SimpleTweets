@@ -95,19 +95,46 @@ package com.codepath.apps.mysimpletweets.models;
 
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.codepath.apps.mysimpletweets.database.MyDatabase;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Tweet {
+@Table(database = MyDatabase.class)
 
-    private String body;
-    private long uid;
-    private User user;
-    private String  createdAt;
-    private String imageUrl;
+public class Tweet extends BaseModel implements Parcelable {
+
+    public Tweet() {
+
+    }
+
+    @Column
+    public String body;
+
+    @Column
+    @PrimaryKey
+    public long uid;
+
+    @Column
+    @ForeignKey(saveForeignKeyModel = false)
+    public User user;
+
+    @Column
+    public String  createdAt;
+
+    @Column
+    public String imageUrl;
 
     public String getBody() {
         return body;
@@ -127,6 +154,26 @@ public class Tweet {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public static Tweet fromJSON(JSONObject jsonObject){
@@ -175,4 +222,38 @@ public class Tweet {
         }
         return tweets;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.body);
+        dest.writeLong(this.uid);
+        dest.writeParcelable(this.user, flags);
+        dest.writeString(this.createdAt);
+        dest.writeString(this.imageUrl);
+    }
+
+    protected Tweet(Parcel in) {
+        this.body = in.readString();
+        this.uid = in.readLong();
+        this.user = in.readParcelable(User.class.getClassLoader());
+        this.createdAt = in.readString();
+        this.imageUrl = in.readString();
+    }
+
+    public static final Parcelable.Creator<Tweet> CREATOR = new Parcelable.Creator<Tweet>() {
+        @Override
+        public Tweet createFromParcel(Parcel source) {
+            return new Tweet(source);
+        }
+
+        @Override
+        public Tweet[] newArray(int size) {
+            return new Tweet[size];
+        }
+    };
 }

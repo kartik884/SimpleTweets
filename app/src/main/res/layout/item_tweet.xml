@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants">
 
     <ImageView
         android:id="@+id/ivProfilePic"
@@ -46,6 +47,7 @@
         android:text="TextView"
         android:autoLink="all"
         android:paddingTop="5dp"
+        android:descendantFocusability="blocksDescendants"
         android:layout_toRightOf="@+id/ivProfilePic"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:layout_below="@+id/llName"
@@ -58,6 +60,8 @@
         android:layout_below="@+id/tvBody"
         android:layout_alignLeft="@+id/tvBody"
         app:srcCompat="@drawable/ic_launcher"
+        android:clickable="false"
+        android:focusable="false"
         />
 
 
