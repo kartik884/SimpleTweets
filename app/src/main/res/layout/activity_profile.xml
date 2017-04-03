@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.codepath.apps.mysimpletweets.activities.ProfileActivity">
+
+    <include android:layout_height="wrap_content" android:id="@+id/tbUserTimeline"
+        android:layout_width="match_parent" layout="@layout/toolbar_main"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tbUserTimeline"
+        android:id="@+id/flUserHeader"
+        android:paddingBottom="10dp">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/flUserTimelineContainer"
+        android:layout_below="@id/flUserHeader">
+
+    </FrameLayout>
+
+</RelativeLayout>

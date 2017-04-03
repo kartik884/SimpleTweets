@@ -1,5 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
     <item
         android:id="@+id/sendTweet"
         android:icon="@mipmap/twitter_edit"
@@ -7,5 +9,15 @@
         app:showAsAction="ifRoom"
         android:title="Compose">
     </item>
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_profile_white"
+        android:onClick="onProfileClick"
+        app:showAsAction="ifRoom"
+        android:title="Profile"
+        >
+    </item>
+
+
 
 </menu>

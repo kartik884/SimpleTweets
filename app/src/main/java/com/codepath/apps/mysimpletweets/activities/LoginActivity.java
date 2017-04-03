@@ -31,6 +31,9 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
 	}
 
+	public void onProfileClick(MenuItem mi){
+	}
+
 	// OAuth authenticated successfully, launch primary authenticated activity
 	// i.e Display application "homepage"
 	@Override

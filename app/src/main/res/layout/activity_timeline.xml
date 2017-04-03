@@ -17,32 +17,39 @@
 
         </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
+    <!--fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fragment_tweetlist"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        class="com.codepath.apps.mysimpletweets.fragments.HomeTimeLineFragment"
+        tools:layout="@layout/fragment_tweets_list">
+    </fragment -->
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swipeContainer"
+
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/lvTweets"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical">
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/tabs"
+            app:pstsShouldExpand="true"
+            app:pstsTextAllCaps="true"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
             />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-    </FrameLayout>
-
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            app:layout_anchor="@id/tabs"
+            app:layout_anchorGravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white" />
+    </LinearLayout>
 
 
     <android.support.design.widget.FloatingActionButton
@@ -50,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:src="@android:drawable/ic_input_add"
-        app:layout_anchor="@id/swipeContainer"
+        app:layout_anchor="@id/viewpager"
         app:layout_anchorGravity="bottom|right|end"
         />
 

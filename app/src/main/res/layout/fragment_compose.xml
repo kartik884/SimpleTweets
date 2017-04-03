@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".fragments.ComposeFragment"
     android:paddingBottom="10dp"
     android:paddingTop="10dp"
@@ -61,47 +61,44 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_below="@+id/llTweetHead">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llTweetHead"
+            android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:counterEnabled="true"
-                app:counterMaxLength="140"
-                >
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Whats on your mind?"
-                android:lines="10"
-                android:minLines="5"
-                android:id="@+id/etTweetBody"
-                android:inputType="textMultiLine"
-                android:background="@drawable/border"
-                android:paddingBottom="10dp"
-                />
+                app:counterMaxLength="140">
+
+                <EditText
+                    android:id="@+id/etTweetBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:hint="Whats on your mind?"
+                    android:inputType="textMultiLine"
+                    android:lines="5"
+                    android:minLines="3"
+                    android:paddingBottom="10dp" />
             </android.support.design.widget.TextInputLayout>
 
 
             <Button
+                android:id="@+id/btTweet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btTweet"
                 android:layout_below="@+id/tvTweet"
-                android:text="Tweet"
-                android:textColor="@android:color/white"
+                android:layout_gravity="center_horizontal|right"
                 android:background="#1da1f2"
+                android:text="Tweet"
                 android:textAlignment="center"
-                android:layout_gravity="center_horizontal|right"/>
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
 
     </RelativeLayout>
-
-
 
 
 </FrameLayout>

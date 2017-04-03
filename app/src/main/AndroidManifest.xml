@@ -40,7 +40,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.TimelineActivity" />
-        <activity android:name=".activities.TweetDetail"></activity>
+        <activity android:name=".activities.TweetDetail" />
+        <activity android:name=".activities.ProfileActivity"></activity>
     </application>
 
 </manifest>

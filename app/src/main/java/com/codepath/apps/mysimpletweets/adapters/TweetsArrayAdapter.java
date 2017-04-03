@@ -28,13 +28,24 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
 
     // Define listener member variable
     private OnItemClickListener listener;
+    private OnProfileClickListner profileClickListner;
     // Define the listener interface
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
+
+    public interface OnProfileClickListner {
+        void onProfileClick(View itemView, int position);
+    }
+
     // Define the method that allows the parent activity or fragment to define the listener
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnProfileClickListener(OnProfileClickListner listener) {
+        this.profileClickListner = listener;
     }
 
     // Store a member variable for the contacts
@@ -66,6 +77,20 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
             ivProfilePic = (ImageView) itemView.findViewById(R.id.ivProfilePic);
             ivTweetImage = (ImageView) itemView.findViewById(R.id.ivTweetImage);
 
+            ivProfilePic.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(getContext(),"Cliked on profile image",Toast.LENGTH_SHORT).show();
+                    if(profileClickListner != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            profileClickListner.onProfileClick(itemView, position);
+                        }
+                    }
+                }
+            });
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -80,8 +105,6 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
             });
 
         }
-
-
     }
 
 
