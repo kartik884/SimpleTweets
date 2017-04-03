@@ -50,7 +50,6 @@ public class ComposeFragment extends DialogFragment {
     private User user;
     private String mParam2;
 
-    TwitterClient client;
     TextView tvName;
     TextView tvScreenName;
     ImageView ivProfilePic;
@@ -59,7 +58,7 @@ public class ComposeFragment extends DialogFragment {
     ImageButton ibtCancel;
     AlertDialog dialog;
     SharedPreferences pref;
-
+    TwitterClient client;
     private TweetFragmentListner mListener;
 
     public ComposeFragment() {
@@ -70,14 +69,13 @@ public class ComposeFragment extends DialogFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param user Parameter 1.
+     *
      * @return A new instance of fragment ComposeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ComposeFragment newInstance(User user) {
+    public static ComposeFragment newInstance() {
         ComposeFragment fragment = new ComposeFragment();
         Bundle args = new Bundle();
-        args.putParcelable("user", user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,19 +86,16 @@ public class ComposeFragment extends DialogFragment {
         if (getArguments() != null) {
             user = getArguments().getParcelable("user");
         }
+
+        client = TwitterApplication.getRestClient();
+        getCurrentUser();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_compose, container, false);
-    }
-
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_compose, container, false);
 
         tvName = (TextView) view.findViewById(R.id.tvTweetUserName);
         tvScreenName = (TextView) view.findViewById(R.id.tvTweetScreenName);
@@ -120,18 +115,18 @@ public class ComposeFragment extends DialogFragment {
         btSendTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            sendTweet(etTweetBody.getText().toString());
+                sendTweet(etTweetBody.getText().toString());
             }
         });
 
-        tvName.setText(user.getName());
-        tvScreenName.setText(user.getScreenName());
+        return view;
 
-        Glide.with(getContext()).load(user.getProfileImageUrl()).bitmapTransform(
-                new RoundedCornersTransformation(getContext(),4, 4)).into(ivProfilePic);
+    }
 
-        client = TwitterApplication.getRestClient();
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -228,5 +223,25 @@ public class ComposeFragment extends DialogFragment {
     public interface TweetFragmentListner {
         // TODO: Update argument type and name
         void onFragmentInteraction(Tweet tweet);
+    }
+
+    public void getCurrentUser(){
+        client.verifyCredentials(new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                //setCurrentUser(User.fromJSON(response));
+                user = User.fromJSON(response);
+                tvName.setText(user.getName());
+                tvScreenName.setText(user.getScreenName());
+
+                Glide.with(getContext()).load(user.getProfileImageUrl()).bitmapTransform(
+                        new RoundedCornersTransformation(getContext(),4, 4)).into(ivProfilePic);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(getContext(),"Failed to get the user details",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

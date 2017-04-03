@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
+import com.codepath.apps.mysimpletweets.adapters.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -35,6 +37,7 @@ public class MentionsTimeLineFragment extends Fragment {
     TwitterClient client;
     ArrayList<Tweet> mentions;
     TweetsArrayAdapter aTweets;
+    EndlessRecyclerViewScrollListener scrollListener;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,6 +51,14 @@ public class MentionsTimeLineFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvMentions.getContext(),
                 linearLayoutManager.getOrientation());
         rvMentions.addItemDecoration(dividerItemDecoration);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadOldMentions(totalItemsCount);
+            }
+        };
+        rvMentions.addOnScrollListener(scrollListener);
 
         return v;
     }
@@ -81,6 +92,26 @@ public class MentionsTimeLineFragment extends Fragment {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 //get Mentions from database
                 //getOfflineTweets();
+            }
+        });
+    }
+
+    public void loadOldMentions(int totalItemsCount){
+        long maxId = mentions.get(totalItemsCount-1).getUid();
+
+        client.getOldMentions(maxId,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
+                ArrayList<Tweet> tempTweets = Tweet.fromJSONArray(response);
+                tempTweets.remove(0);//remove the old mention
+                mentions.addAll(tempTweets);
+                aTweets.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(getContext(),"Failed to get tweets",Toast.LENGTH_SHORT).show();
             }
         });
     }

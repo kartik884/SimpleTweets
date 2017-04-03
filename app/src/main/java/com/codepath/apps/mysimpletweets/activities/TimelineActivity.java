@@ -52,8 +52,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
     public void onSendAction(MenuItem mi) {
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        //ComposeFragment filterFragment = ComposeFragment.newInstance(currentUser);
-        //filterFragment.show(fm,"fragment_compose");
+        ComposeFragment filterFragment = ComposeFragment.newInstance();
+        filterFragment.show(fm,"fragment_compose");
     }
 
     public void onProfileClick(MenuItem mi){
@@ -65,8 +65,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
     @Override
     public void onFragmentInteraction(Tweet tweet) {
-//        tweets.add(0,tweet);
-//        aTweets.notifyDataSetChanged();
+        //tweets.add(0,tweet);
+        //aTweets.notifyDataSetChanged();
     }
 
 

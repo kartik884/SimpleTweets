@@ -9,7 +9,6 @@ import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.Tweet_Table;
-import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -34,22 +33,8 @@ public class HomeTimeLineFragment extends TweetsListFragment{
         super.onCreate(savedInstanceState);
 
         client = TwitterApplication.getRestClient(); //returns a single client
-        getCurrentUser();
+
         populateTimeLine();
-    }
-
-    public void getCurrentUser(){
-        client.verifyCredentials(new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                setCurrentUser(User.fromJSON(response));
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(getContext(),"Failed to get the user details",Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     public void populateTimeLine(){
